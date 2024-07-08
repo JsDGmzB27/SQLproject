@@ -4,7 +4,8 @@ import { pool } from "./database/usersdb.js"; // Importa la conexión a la base 
 import verifier from "./controller/register.js"; // Importa el controlador para registrar usuarios
 import bcrypt from "bcrypt"; // Importa la biblioteca bcrypt para el hashing de contraseñas
 import session from "express-session"; // Importa la biblioteca express-session para manejar sesiones
-import { marked, Marked } from "marked"; // Importa la biblioteca marked para convertir Markdown a HTML
+import { marked } from "marked"; // Importa la biblioteca marked para convertir Markdown a HTML
+import path from "path";
 
 dotenv.config(); // Carga las variables de entorno desde el archivo .env
 
@@ -18,6 +19,10 @@ expressApp.use(express.json()); // Middleware para parsear JSON en el cuerpo de 
 expressApp.use(
   session({ secret: SCRT, resave: true, saveUninitialized: true }) // Configura el middleware de sesiones con el secreto, resave y saveUninitialized
 );
+
+expressApp.get('/documentation', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', './documentation.html'));
+});
 
 // Ruta para iniciar sesión
 expressApp.post("/login", async (req, res) => {
