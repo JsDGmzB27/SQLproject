@@ -14,7 +14,8 @@ async function verifier(data){
   const cryptoPass = await bcrypt.hash(password, saltRounds);
 
   await pool.query(`INSERT INTO users_data ( name, email, password, id) 
-  VALUES ('${name}', '${email}','${cryptoPass}','${id}')`);
+  VALUES ( $1, $2 , $3, $4 )`,
+  [ name, email, cryptoPass, id ] );
 
  } catch(error){
 
