@@ -3,8 +3,6 @@ import { pool } from "../database/usersdb.js";
 
 async function taskManager(body, userId) {
   const { type, name, id, procedure, status, description, id_container } = body; // Extrae los datos del cuerpo de la solicitud
-  // Convierte la descripción de Markdown a HTML
-  const markdescription = marked(description);
 
   const user_id = userId; // Obtiene el id del usuario de la sesión
 
@@ -40,6 +38,8 @@ async function taskManager(body, userId) {
     console.log(crear.rows.length);
 
     if(crear.rows.length > 0){
+      // Convierte la descripción de Markdown a HTML
+      const markdescription = marked(description);
       await pool.query(
         `INSERT INTO tasks (task_name, user_id, container, status, description) 
         VALUES ($1, '${user_id}', $2, '1', $3 )`,
@@ -57,6 +57,8 @@ async function taskManager(body, userId) {
       ); // Elimina una tarea
     } else {
       if (type == "task" && procedure == "update") {
+        // Convierte la descripción de Markdown a HTML
+         const markdescription = marked(description);
         await pool.query(
           `UPDATE tasks SET task_name = $1, 
         status = $2, 
